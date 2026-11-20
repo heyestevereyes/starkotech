@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta azul (mismos roles que Shipply) */
+  --color-ink: #06132a;
+  --color-navy: #0c2347;
+  --color-cobalt: #1c4f9c;
+  --color-signal: #5bc8ff;
+  --color-signal-soft: #d5f0ff;
+  --color-mist: #edf2f8;
+  --color-paper: #f8fafd;
+  --color-steel: #64738a;
+  /* Texto secundario sobre claros (steel puro solo pasa en tamaños grandes) */
+  --color-graphite: #46526a;
+  /* Solo para el punto de estado "en línea" */
+  --color-online: #3ddc97;
+  /* Semánticos de formulario y mensajería (no son parte de la paleta de marca) */
+  --color-alert: #b42318;
+  --color-alert-soft: #fde8e6;
+  --color-whatsapp: #128c7e;
+
+  /* Tipografía */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* Escala fluida */
+  --text-display: clamp(2.25rem, 1.3rem + 3.8vw, 4.75rem);
+  --text-hero: clamp(2.25rem, 1rem + 3.4vw, 3.25rem);
+  --text-h2: clamp(2rem, 1.35rem + 2.6vw, 3.75rem);
+  --text-h3: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  --text-lead: clamp(1.0625rem, 0.98rem + 0.35vw, 1.3125rem);
+
+  --tracking-tightest: -0.035em;
+  --tracking-tight: -0.03em;
+  --tracking-eyebrow: 0.18em;
+
+  --radius-card: 24px;
+  --radius-card-lg: 28px;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --shadow-soft: 0 1px 2px rgb(6 19 42 / 0.04), 0 12px 32px -12px rgb(6 19 42 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(6 19 42 / 0.05), 0 28px 60px -20px rgb(6 19 42 / 0.28);
+  --shadow-deep: 0 40px 80px -24px rgb(0 0 0 / 0.6), 0 12px 24px -12px rgb(0 0 0 / 0.4);
+
+  --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
+  --animate-marquee-reverse: marquee-reverse var(--marquee-duration, 60s) linear infinite;
+  --animate-pulse-ring: pulse-ring 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translate3d(-50%, 0, 0); }
+    to { transform: translate3d(0, 0, 0); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-mist);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  /* Sobre fondos claros el foco usa cobalt (signal no contrasta con mist ni paper) */
+  .on-light :focus-visible,
+  .on-light:focus-visible {
+    outline-color: var(--color-cobalt);
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Grano sutil sobre degradados oscuros */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.09;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: 82rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 0.6rem + 3vw, 3rem);
+}
+
+@utility section-y {
+  padding-block: clamp(4.5rem, 3rem + 6vw, 9rem);
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+@utility marquee-pause {
+  &:hover .marquee-track,
+  &:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* Retícula tipo plano técnico (blueprint), a muy baja opacidad, solo en fondos oscuros */
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-signal) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-signal) 7%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(80% 70% at 50% 40%, black 20%, transparent 100%);
+}
+
+/* Degradado del hero: ink a cobalt con brillo signal difuso abajo */
+.bg-hero {
+  background:
+    radial-gradient(60% 45% at 50% 108%, color-mix(in srgb, var(--color-signal) 50%, transparent) 0%, color-mix(in srgb, var(--color-signal) 12%, transparent) 45%, transparent 75%),
+    radial-gradient(90% 70% at 70% 40%, var(--color-cobalt) 0%, transparent 70%),
+    radial-gradient(120% 90% at 20% 0%, var(--color-navy) 0%, var(--color-ink) 60%);
+}
+
+/* Iconografía lineal consistente: trazo 1.5px */
+.lucide {
+  stroke-width: 1.5;
+}
+
+/* Entrada del hero en CSS puro (no espera a la hidratación: mejor LCP) */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 0.9s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; }
+}
+
+/* Entrada solo con transform para el H1 y el subtítulo: visibles desde el primer pintado (LCP) */
+@keyframes rise-soft {
+  from { transform: translate3d(0, 18px, 0); }
+  to { transform: none; }
+}
+.rise-soft {
+  animation: rise-soft 0.9s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise-soft { animation: none; }
+}
+
+/* Línea de red del widget del hero: se dibuja al cargar */
+.widget-route {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: draw-route 1.6s 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes draw-route {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-route { animation: none; stroke-dashoffset: 0; }
+}
+
+/* Resaltado del H1: bloque signal que se pinta (por línea, también si la frase se parte) y texto que pasa de mist a ink */
+.highlight {
+  background-image: linear-gradient(var(--color-signal), var(--color-signal));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 78%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  color: var(--color-ink);
+  animation: paint 0.9s 0.45s cubic-bezier(0.65, 0, 0.35, 1) both, ink-in 0.4s 0.8s ease both;
+}
+@keyframes paint {
+  from { background-size: 0% 78%; }
+  to { background-size: 100% 78%; }
+}
+@keyframes ink-in {
+  from { color: var(--color-mist); }
+  to { color: var(--color-ink); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .highlight { animation: none; }
+}
+
+/* Drawer de servicio sobre <dialog> y bloqueo de scroll del fondo */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+.drawer[open] .drawer-panel {
+  animation: drawer-in 0.5s var(--ease-out-expo) both;
+}
+.drawer[open]::backdrop {
+  animation: drawer-fade-in 0.3s ease both;
+}
+.drawer[data-closing="true"] .drawer-panel {
+  animation: drawer-out 0.2s ease-in both;
+}
+.drawer[data-closing="true"]::backdrop {
+  animation: drawer-fade-out 0.2s ease-in both;
+}
+@keyframes drawer-in {
+  from { opacity: 0; transform: translate3d(48px, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes drawer-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translate3d(32px, 0, 0); }
+}
+@keyframes drawer-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes drawer-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@media (max-width: 767px) {
+  .drawer[open] .drawer-panel {
+    animation-name: drawer-in-up;
+  }
+  .drawer[data-closing="true"] .drawer-panel {
+    animation-name: drawer-out-down;
+  }
+  @keyframes drawer-in-up {
+    from { opacity: 0; transform: translate3d(0, 40px, 0); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes drawer-out-down {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translate3d(0, 28px, 0); }
+  }
+}
+
+/* Marquee: con prefers-reduced-motion se detiene y las filas se acomodan en varias líneas, sin la copia duplicada */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto !important;
+    transform: none !important;
+  }
+  .marquee-dup {
+    display: none !important;
+  }
+}
+
+/* Chips flotantes del hero: flotación lenta y desfasada (solo transform) */
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-slow { animation: none; }
+}
+
+/* Carruseles horizontales sin barra de scroll visible (siguen siendo desplazables con dedo, rueda y teclado) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,22 @@
+node_modules
+.next
+out
+build
+screenshots
+*.tsbuildinfo
+next-env.d.ts
+.env
+.env.*
+!.env.example
+.vercel
+
+# Logs locales
+.start.*
+*.log
+
+# Config local de Claude Code
+.claude/settings.local.json
+
+# PNG originales de Higgsfield (ya convertidos a JPG)
+public/images/hf_*.png
+public/images/productos/hf_*.png
